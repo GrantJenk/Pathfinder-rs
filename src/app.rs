@@ -12,7 +12,7 @@ pub struct App {
     gl: GlGraphics,
     cursor: [f64; 2],
     grid: Grid,
-    sq_dim: i32,
+    sq_dim: f64,
     start_loc: Option<Location>,
     dest_loc: Option<Location>,
 }
@@ -22,6 +22,7 @@ impl App {
         let opengl = OpenGL::V3_2;
         let window_dim: u32 = 800;
         let grid_dim = 50;
+        let sq_dim = (window_dim as f64)/grid_dim as f64;
         let window: GlutinWindow = WindowSettings::new("A* Pathfinder", [window_dim, window_dim])
             .graphics_api(opengl)
             .exit_on_esc(true)
@@ -31,7 +32,7 @@ impl App {
         let mut grid = Grid::new(grid_dim, grid_dim);
         grid.randomize_walls(20);
 
-        App {window, gl, cursor: [-1.0, -1.0], grid, sq_dim: (window_dim as i32)/grid_dim, start_loc: None, dest_loc: None}
+        App {window, gl, cursor: [-1.0, -1.0], grid, sq_dim, start_loc: None, dest_loc: None}
     }
 
     pub fn run(&mut self) {
@@ -58,9 +59,9 @@ impl App {
     }
 
     fn handle_click(&mut self) {
-        let x = (self.cursor[0] as i32)/self.sq_dim;
-        let y = (self.cursor[1] as i32)/self.sq_dim;
-        let clicked_node = self.grid.get_node(Location{x, y});
+        let x = self.cursor[0]/self.sq_dim;
+        let y = self.cursor[1]/self.sq_dim;
+        let clicked_node = self.grid.get_node(Location{ x: x as i32, y: y as i32});
         if clicked_node.is_wall {
             return;
         }
@@ -100,7 +101,7 @@ impl App {
         }
 
         let sq_dim = self.sq_dim;
-        let square = rectangle::square(0.0, 0.0, (sq_dim - 2) as f64);
+        let square = rectangle::square(0.0, 0.0, sq_dim - 2 as f64);
         let grid = &self.grid;
         let start_loc = self.start_loc;
         let dest_loc = self.dest_loc;
@@ -110,7 +111,7 @@ impl App {
 
             for row in 0..grid.get_height() {
                 for col in 0..grid.get_width() {
-                    let (x, y) = (col * sq_dim, row * sq_dim);
+                    let (x, y) = ( (col as f64) * sq_dim, (row as f64) * sq_dim);
                     let node = grid.get_node(Location{x: col, y: row});
                     let color = get_square_color(node);
                     let transform = c
@@ -122,14 +123,14 @@ impl App {
             }
 
             if let Some(loc) = start_loc {
-                let (x, y) = (loc.x * sq_dim, loc.y * sq_dim);
+                let (x, y) = ( (loc.x as f64) * sq_dim, (loc.y as f64) * sq_dim);
                 let transform = c
                     .transform
                     .trans(x as f64, y as f64);
                 rectangle(GREEN, square, transform, gl);
             }
             if let Some(loc) = dest_loc {
-                let (x, y) = (loc.x * sq_dim, loc.y * sq_dim);
+                let (x, y) = ( (loc.x as f64) * sq_dim, (loc.y as f64) * sq_dim);
                 let transform = c
                     .transform
                     .trans(x as f64, y as f64);
