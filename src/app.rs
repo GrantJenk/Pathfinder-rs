@@ -87,7 +87,7 @@ impl App {
     fn render(&mut self, args: &RenderArgs) {
         use graphics::*;
 
-        fn get_square_color(node: &Node) -> [f32; 4] {
+        let get_square_color = |node: &Node| -> [f32; 4] {
             if node.is_path {
                 CYAN
             } else if node.is_wall {
@@ -97,7 +97,7 @@ impl App {
             } else {
                 WHITE
             }
-        }
+        };
 
         let sq_dim = self.sq_dim;
         let square = rectangle::square(0.0, 0.0, sq_dim - 2 as f64);
@@ -111,11 +111,10 @@ impl App {
             for row in 0..grid.get_height() {
                 for col in 0..grid.get_width() {
                     let (x, y) = ( (col as f64) * sq_dim, (row as f64) * sq_dim);
-                    let node = grid.get_node(Location(col, row));
-                    let color = get_square_color(node);
+                    let color = get_square_color( grid.get_node(Location(col,row)) );
                     let transform = c
                         .transform
-                        .trans(x as f64, y as f64);
+                        .trans(x, y);
                     
                     rectangle(color, square, transform, gl);
                 }
