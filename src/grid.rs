@@ -155,19 +155,4 @@ impl Grid {
             }
         }
     }
-
-    pub fn print(&self) {
-        for (pos, node) in self.nodes.iter().enumerate() {
-            if node.is_path {
-                print!("x");
-            } else if node.is_wall {
-                print!("-")
-            } else {
-                print!(".");
-            }
-            if ((pos + 1) as i32) % self.width == 0 {
-                println!(""); // New line
-            }
-        }
-    }
 }
