@@ -6,6 +6,13 @@ use piston::input::{Button, PressEvent, RenderArgs, RenderEvent};
 use glutin_window::GlutinWindow;
 use opengl_graphics::{GlGraphics, OpenGL};
 
+const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
+const RED: [f32; 4] = [1.0, 0.0, 0.0, 1.0];
+const LIGHT: [f32; 4] = [0.79, 0.79, 1.0, 1.0];
+const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
+const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
+const CYAN: [f32; 4] = [0.0, 0.79, 1.0, 1.0];
+
 pub struct App {
     window: GlutinWindow,
     gl: GlGraphics,
@@ -79,13 +86,6 @@ impl App {
 
     fn render(&mut self, args: &RenderArgs) {
         use graphics::*;
-
-        const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
-        const RED: [f32; 4] = [1.0, 0.0, 0.0, 1.0];
-        const LIGHT: [f32; 4] = [0.79, 0.79, 1.0, 1.0];
-        const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
-        const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
-        const CYAN: [f32; 4] = [0.0, 0.79, 1.0, 1.0];
 
         fn get_square_color(node: &Node) -> [f32; 4] {
             if node.is_path {
