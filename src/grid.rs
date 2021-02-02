@@ -1,3 +1,5 @@
+use rand::Rng;
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Location(pub i32, pub i32);
 
@@ -52,12 +54,9 @@ impl Grid {
     }
 
     pub fn randomize_walls(&mut self, percent_chance: u8) {
-        for y in 0..self.height {
-            for x in 0..self.width {
-                if rand::random::<u8>() % 100 < percent_chance {
-                    let node_index = self.get_node_index(Location(x, y));
-                    self.nodes[node_index].is_wall = true;
-                }
+        for node in &mut self.nodes {
+            if rand::thread_rng().gen_range(1, 101) < percent_chance {
+                node.is_wall = true;
             }
         }
     }
