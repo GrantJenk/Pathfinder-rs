@@ -65,12 +65,8 @@ impl Grid {
         &self.nodes[self.get_node_index(loc)]
     }
 
-    pub fn get_width(&self) -> i32 {
-        self.width
-    }
-
-    pub fn get_height(&self) -> i32 {
-        self.height
+    pub fn get_nodes(&self) -> &Vec<Node> {
+        &self.nodes
     }
 
     fn get_node_index(&self, loc: Location) -> usize {

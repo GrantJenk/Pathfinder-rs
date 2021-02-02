@@ -108,16 +108,13 @@ impl App {
         self.gl.draw(args.viewport(), |c, gl| {
             clear(WHITE, gl);
 
-            for row in 0..grid.get_height() {
-                for col in 0..grid.get_width() {
-                    let (x, y) = ( (col as f64) * sq_dim, (row as f64) * sq_dim);
-                    let color = get_square_color( grid.get_node(Location(col,row)) );
-                    let transform = c
-                        .transform
-                        .trans(x, y);
-                    
-                    rectangle(color, square, transform, gl);
-                }
+            for node in grid.get_nodes() {
+                let color = get_square_color(node);
+                let transform = c
+                    .transform
+                    .trans(node.loc.0 as f64 * sq_dim, node.loc.1 as f64 * sq_dim);
+
+                rectangle(color, square, transform, gl);
             }
 
             if let Some(loc) = start_loc {
