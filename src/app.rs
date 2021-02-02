@@ -1,5 +1,4 @@
-use crate::grid::{Grid, Node};
-use crate::location::Location;
+use crate::grid::{Location, Node, Grid};
 
 use piston::{MouseButton, MouseCursorEvent, window::WindowSettings};
 use piston::event_loop::{EventSettings, Events};

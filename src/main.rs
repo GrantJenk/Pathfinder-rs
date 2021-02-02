@@ -1,6 +1,5 @@
 mod app;
 mod grid;
-mod location;
 
 use app::App;
 
