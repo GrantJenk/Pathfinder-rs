@@ -67,7 +67,7 @@ impl App {
     fn handle_click(&mut self) {
         let x = self.cursor[0]/self.sq_dim;
         let y = self.cursor[1]/self.sq_dim;
-        let clicked_node = self.grid.get_node(Location{ x: x as i32, y: y as i32});
+        let clicked_node = self.grid.get_node(Location(x as i32, y as i32));
         if clicked_node.is_wall {
             return;
         }
@@ -111,7 +111,7 @@ impl App {
             for row in 0..grid.get_height() {
                 for col in 0..grid.get_width() {
                     let (x, y) = ( (col as f64) * sq_dim, (row as f64) * sq_dim);
-                    let node = grid.get_node(Location{x: col, y: row});
+                    let node = grid.get_node(Location(col, row));
                     let color = get_square_color(node);
                     let transform = c
                         .transform
@@ -122,14 +122,14 @@ impl App {
             }
 
             if let Some(loc) = start_loc {
-                let (x, y) = ( (loc.x as f64) * sq_dim, (loc.y as f64) * sq_dim);
+                let (x, y) = ( (loc.0 as f64) * sq_dim, (loc.1 as f64) * sq_dim);
                 let transform = c
                     .transform
                     .trans(x as f64, y as f64);
                 rectangle(GREEN, square, transform, gl);
             }
             if let Some(loc) = dest_loc {
-                let (x, y) = ( (loc.x as f64) * sq_dim, (loc.y as f64) * sq_dim);
+                let (x, y) = ( (loc.0 as f64) * sq_dim, (loc.1 as f64) * sq_dim);
                 let transform = c
                     .transform
                     .trans(x as f64, y as f64);

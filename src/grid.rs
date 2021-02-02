@@ -1,13 +1,10 @@
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Location {
-    pub x: i32,
-    pub y: i32,
-}
+pub struct Location(pub i32, pub i32);
 
 impl Location {
     pub fn dist(start: Location, dest: Location) -> f64 {
-        let x_diff = (start.x - dest.x).pow(2);
-        let y_diff = (start.y - dest.y).pow(2);
+        let x_diff = (start.0 - dest.0).pow(2);
+        let y_diff = (start.1 - dest.1).pow(2);
         ((x_diff + y_diff) as f64).sqrt()
     }
 }
@@ -25,7 +22,7 @@ pub struct Node {
 impl Node {
     pub fn new(x: i32, y: i32) -> Node {
         Node {
-            loc: Location{x, y},
+            loc: Location(x, y),
             f: f64::INFINITY,
             g: f64::INFINITY,
             parent: None,
@@ -58,7 +55,7 @@ impl Grid {
         for y in 0..self.height {
             for x in 0..self.width {
                 if rand::random::<u8>() % 100 < percent_chance {
-                    let node_index = self.get_node_index(Location{x, y});
+                    let node_index = self.get_node_index(Location(x, y));
                     self.nodes[node_index].is_wall = true;
                 }
             }
@@ -78,13 +75,13 @@ impl Grid {
     }
 
     fn get_node_index(&self, loc: Location) -> usize {
-        (loc.y * self.width + loc.x) as usize
+        (loc.1 * self.width + loc.0) as usize
     }
 
     pub fn reset(&mut self) {
         for y in 0..self.height {
             for x in 0..self.width {
-                let node_index = self.get_node_index(Location{x, y});
+                let node_index = self.get_node_index(Location(x, y));
                 self.nodes[node_index].visited = false;
                 self.nodes[node_index].is_path = false;
                 self.nodes[node_index].f = f64::INFINITY;
@@ -125,17 +122,19 @@ impl Grid {
             }
 
             let mut neighbors = Vec::new();
-            if cur_loc.x > 0 {
-                neighbors.push(Location{x: cur_loc.x - 1, y: cur_loc.y});
+            let col = cur_loc.0;
+            let row = cur_loc.1;
+            if col > 0 {
+                neighbors.push(Location(col-1, row));
             }
-            if cur_loc.y > 0 {
-                neighbors.push(Location{x: cur_loc.x, y: cur_loc.y - 1});
+            if row > 0 {
+                neighbors.push(Location(col, row-1));
             }
-            if cur_loc.y < self.height - 1 {
-                neighbors.push(Location{x: cur_loc.x, y: cur_loc.y + 1});
+            if row < self.height-1 {
+                neighbors.push(Location(col, row+1));
             }
-            if cur_loc.x < self.width - 1 {
-                neighbors.push(Location{x: cur_loc.x + 1, y: cur_loc.y});
+            if col < self.width-1 {
+                neighbors.push(Location(col+1, row));
             }
 
             let cur_index = self.get_node_index(cur_loc);
